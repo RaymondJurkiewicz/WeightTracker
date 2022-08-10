@@ -31,12 +31,19 @@ dataset = dataset[['Date',
                    'Goal Calories', 
                    'Calories']]
 
+dataset.astype({'Goal Weight':'float',
+           'Weight':'float',
+           'Goal Calories':'float',
+           'Calories':'float'
+           })
 dataset['Date'] = pd.to_datetime(dataset['Date'])
+
+
 dataset.set_index('Date')
 dataset = dataset.loc[(dataset['Date'] > '2022-05-01') & 
                       (dataset['Date'] <= date.today().strftime("%Y-%m-%d"))]
 
-dataset = dataset.interpolate(method = 'linear')
+dataset['Weight'] = dataset['Weight'].interpolate(method = 'linear')
 
 print(date.today().strftime("%Y-%m-%d"))
 
