@@ -38,9 +38,6 @@ dataset['Weekly Avg Weight'] = dataset['Weight'].rolling(7).mean()
 dataset['Weekly Avg Calories'] = dataset['Calories'].rolling(7).mean()
 print(dataset)
 
-
-
-
 ####### Plot Weight
 
 sns.set_style('dark')
