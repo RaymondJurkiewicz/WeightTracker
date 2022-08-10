@@ -16,6 +16,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
+from datetime import date
 
 
 ##### Grab the Data
@@ -24,13 +25,20 @@ dataset = pd.read_csv('Autology_Data.csv')
 
 ##### Clean dataset
 
-
 dataset = dataset[['Date', 
-                        'Goal Weight', 
-                        'Weight', 
-                        'Goal Calories', 
-                        'Calories']]
+                   'Goal Weight', 
+                   'Weight', 
+                   'Goal Calories', 
+                   'Calories']]
 
+dataset['Date'] = pd.to_datetime(dataset['Date'])
+dataset.set_index('Date')
+dataset = dataset.loc[(dataset['Date'] > '2022-05-01') & 
+                      (dataset['Date'] <= date.today().strftime("%Y-%m-%d"))]
+
+dataset = dataset.interpolate(method = 'linear')
+
+print(date.today().strftime("%Y-%m-%d"))
 
 ##### Add Weekly moving average
 
@@ -50,13 +58,12 @@ plt.gcf().autofmt_xdate()
 ax = plt.gca()
 #edit x axies
 #ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
-ax.xaxis.set_major_locator(ticker.MultipleLocator(base=21))
+ax.xaxis.set_major_locator(ticker.MultipleLocator(base=14))
 
 plt.savefig('weight.png', dpi=300)
 
 #show figure
 plt.show()
-
 
 ####################################
 
@@ -72,14 +79,10 @@ plt.gcf().autofmt_xdate()
 ax = plt.gca()
 #edit x axies
 #ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
-ax.xaxis.set_major_locator(ticker.MultipleLocator(base=21))
+ax.xaxis.set_major_locator(ticker.MultipleLocator(base=14))
 
 
 plt.savefig('calories.png', dpi=300)
 
 #show figure
 plt.show()
-
-
-
-
