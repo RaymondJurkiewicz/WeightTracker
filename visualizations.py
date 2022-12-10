@@ -2,22 +2,39 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sat May 28 17:57:00 2022
-
 @author: rjurkiewicz
-
-This code generates a streamlit dashboard
-
+This code generates graphs of daily weight & calories
 """
 
 # import numpy as np
 import pandas as pd
-# import plotly as py
-
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from datetime import date
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
+
+#Set up and conenct to API
+
+scope = ["https://spreadsheets.google.com/feeds",
+         'https://www.googleapis.com/auth/spreadsheets',
+         "https://www.googleapis.com/auth/drive.file",
+         "https://www.googleapis.com/auth/drive"]
+
+creds = ServiceAccountCredentials.from_json_keyfile_name("autology_credentials.json", scope)
+
+client = gspread.authorize(creds)
+
+sheet = client.open("Weight Tracker").sheet1
+
+data = sheet.get_all_records()
+
+#save as csv
+
+dataFrame = pd.DataFrame(data)
+dataFrame.to_csv('Autology_Data.csv')
 
 ##### Grab the Data
 
