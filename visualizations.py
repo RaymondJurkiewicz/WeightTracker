@@ -6,7 +6,7 @@ Created on Sat May 28 17:57:00 2022
 This code generates graphs of daily weight & calories
 """
 
-# import numpy as np
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -31,16 +31,14 @@ sheet = client.open("Weight Tracker").sheet1
 
 data = sheet.get_all_records()
 
-#save as csv
+# save as csv
 
-dataFrame = pd.DataFrame(data)
-dataFrame.to_csv('Autology_Data.csv')
-
-##### Grab the Data
-
-dataset = pd.read_csv('Autology_Data.csv')
+dataset = pd.DataFrame(data)
+dataset.to_csv('Autology_Data.csv')
 
 ##### Clean dataset
+
+dataset = dataset.replace(r'^\s*$', np.nan, regex=True)
 
 dataset = dataset[['Date', 
                    'Goal Weight', 
@@ -62,13 +60,11 @@ dataset = dataset.loc[(dataset['Date'] > '2022-05-01') &
 
 dataset['Weight'] = dataset['Weight'].interpolate(method = 'linear')
 
-print(date.today().strftime("%Y-%m-%d"))
 
 ##### Add Weekly moving average
 
 dataset['Weekly Avg Weight'] = dataset['Weight'].rolling(7).mean()
 dataset['Weekly Avg Calories'] = dataset['Calories'].rolling(7).mean()
-print(dataset)
 
 ####### Plot Weight
 
