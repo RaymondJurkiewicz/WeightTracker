@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
+import matplotlib.dates as mdates
 from datetime import date
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -55,7 +55,7 @@ dataset['Date'] = pd.to_datetime(dataset['Date'])
 
 
 dataset.set_index('Date')
-dataset = dataset.loc[(dataset['Date'] > '2022-05-01') & 
+dataset = dataset.loc[(dataset['Date'] > '2022-03-01') & 
                       (dataset['Date'] <= date.today().strftime("%Y-%m-%d"))]
 
 dataset['Weight'] = dataset['Weight'].interpolate(method = 'linear')
@@ -66,42 +66,67 @@ dataset['Weight'] = dataset['Weight'].interpolate(method = 'linear')
 dataset['Weekly Avg Weight'] = dataset['Weight'].rolling(7).mean()
 dataset['Weekly Avg Calories'] = dataset['Calories'].rolling(7).mean()
 
-####### Plot Weight
+
+
+#################
+## Plot Weight ##
+#################
 
 sns.set_style('dark')
-sns.lineplot(x='Date', y='Weight', sort=False, data=dataset)
-sns.lineplot(x='Date', y='Weekly Avg Weight', sort=False, data=dataset)
+
+weight = sns.lineplot(x='Date', y='Weight', sort=False, data=dataset, legend='full', label='weight')
+weekly_avg_weight = sns.lineplot(x='Date', y='Weekly Avg Weight', sort=False, data=dataset, legend='full', label='weekly avg weight')
+goal_weight = sns.lineplot(x='Date', y='Goal Weight', sort=False, data=dataset, legend='full', label='goal weight')
 
 # Get the current Axes
 plt.gcf().autofmt_xdate()
 
 ax = plt.gca()
-#edit x axies
-#ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
-ax.xaxis.set_major_locator(ticker.MultipleLocator(base=14))
+
+# Set the locator
+locator = mdates.MonthLocator()  # every month
+# Specify the format - %b gives us Jan, Feb...
+fmt = mdates.DateFormatter('%b')
+
+ax.xaxis.set_major_locator(locator)
+ax.xaxis.set_major_formatter(fmt)
+
+plt.title('Weight Over Time')
+plt.legend()
+plt.grid()
 
 plt.savefig('weight.png', dpi=300)
 
 #show figure
 plt.show()
 
-####################################
+
+###################
+## Plot Calories ##
+###################
 
 sns.set_style('dark')
-graph = sns.lineplot(x='Date', y='Calories', sort=False, data=dataset)
-graph2 = sns.lineplot(x='Date', y='Weekly Avg Calories', sort=False, data=dataset)
+calories = sns.lineplot(x='Date', y='Calories', sort=False, data=dataset, legend='full', label='calories')
+weekly_avg_calories = sns.lineplot(x='Date', y='Weekly Avg Calories', sort=False, data=dataset, legend='full', label='weekly avg calories')
 
-graph.axhline(1800, c = 'black')
+calories.axhline(1800, c = 'black')
 
 # Get the current Axes
 plt.gcf().autofmt_xdate()
 
 ax = plt.gca()
-#edit x axies
-#ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
-ax.xaxis.set_major_locator(ticker.MultipleLocator(base=14))
 
+# Set the locator
+locator = mdates.MonthLocator()  # every month
+# Specify the format - %b gives us Jan, Feb...
+fmt = mdates.DateFormatter('%b')
 
+ax.xaxis.set_major_locator(locator)
+ax.xaxis.set_major_formatter(fmt)
+
+plt.title('Calories Over Time')
+plt.legend()
+plt.grid()
 plt.savefig('calories.png', dpi=300)
 
 #show figure
