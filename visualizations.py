@@ -15,7 +15,6 @@ from datetime import date
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-
 #Set up and conenct to API
 
 scope = ["https://spreadsheets.google.com/feeds",
@@ -86,7 +85,7 @@ ax = plt.gca()
 # Set the locator
 locator = mdates.MonthLocator()  # every month
 # Specify the format - %b gives us Jan, Feb...
-fmt = mdates.DateFormatter('%b')
+fmt = mdates.DateFormatter('%b %Y')
 
 ax.xaxis.set_major_locator(locator)
 ax.xaxis.set_major_formatter(fmt)
@@ -119,7 +118,7 @@ ax = plt.gca()
 # Set the locator
 locator = mdates.MonthLocator()  # every month
 # Specify the format - %b gives us Jan, Feb...
-fmt = mdates.DateFormatter('%b')
+fmt = mdates.DateFormatter('%b %Y')
 
 ax.xaxis.set_major_locator(locator)
 ax.xaxis.set_major_formatter(fmt)
