@@ -22,7 +22,7 @@ scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive.file",
          "https://www.googleapis.com/auth/drive"]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name("autology_credentials.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("/Users/rjurkiewicz/Desktop/Code/Autology/autology_credentials.json", scope)
 
 client = gspread.authorize(creds)
 
