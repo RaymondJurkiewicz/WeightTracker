@@ -26,7 +26,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name("/Users/rjurkiewicz/Des
 
 client = gspread.authorize(creds)
 
-sheet = client.open("Weight Tracker").sheet1
+sheet = client.open("Weight Tracker").worksheet("2024")
 
 data = sheet.get_all_records()
 
